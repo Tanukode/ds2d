@@ -4,7 +4,14 @@ using UnityEngine;
 
 public class PlayerBehaviour : MonoBehaviour {
 
+	protected bool airborne;
+	protected Rigidbody rigidBody;
+
 	// Use this for initialization
+	void OnEnable(){
+		rigidBody = GetComponent<Rigidbody> ();
+	}
+
 	void Start () {
 		
 	}
@@ -12,6 +19,10 @@ public class PlayerBehaviour : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		MoveHorizontal ();
+		Jump ();
+	}
+
+	void FixedUpdate(){
 	}
 
 	void MoveHorizontal(){
@@ -20,7 +31,21 @@ public class PlayerBehaviour : MonoBehaviour {
 	}
 
 	void Jump(){
-		
+		var y = Time.deltaTime * 5.0f;
+		if (Input.GetKey("space")) {
+			transform.Translate (0, y, 0);
+		}
 	}
+
+	bool Airborne(){
+		Vector3 dwn = transform.TransformDirection (Vector3.down);
+		if (Physics.Raycast (transform.position, dwn, 2)) {
+			return false;
+		} else {
+			return true;
+		}
+
+	}
+
 }
 
